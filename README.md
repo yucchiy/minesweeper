@@ -5,6 +5,6 @@ How to play
 --
 
 ```
-${GOPATH}/bin/go-mines
+go run main.go
 ```
 
