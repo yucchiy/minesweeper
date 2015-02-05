@@ -38,14 +38,54 @@ func TestReset(t *testing.T) {
 	field := &Field{Width: 10, Height: 8}
 
 	field.Reset()
+}
 
-	if len(field.Grid) != 8 {
-		t.Fatalf("length of field.Grid should be 8")
+func TestAllocGrid(t *testing.T) {
+	field := &Field{Width: 10, Height: 8}
+
+	field.AllocGrid()
+
+	expected := 8
+	if len(field.Grid) != expected {
+		t.Fatalf("expected %d to eq %d", len(field.Grid), expected)
 	}
 
+	expected = 10
 	for y := 0; y < 8; y++ {
-		if len(field.Grid[y]) != 10 {
-			t.Fatalf("length of each field.Grid column should be 10")
+		if len(field.Grid[y]) != expected {
+			t.Fatalf("expected %d to eq %d", len(field.Grid[y]), expected)
 		}
+	}
+}
+
+func TestFillMines_withNoAllocationGrid(t *testing.T) {
+	field := &Field{Width: 10, Height: 8}
+
+	err := field.FillMines()
+
+	if err == nil {
+		t.Fatalf("err should not be nil")
+	}
+}
+
+func TestFillMines_success(t *testing.T) {
+	field := &Field{Width: 10, Height: 8, Mine: 5}
+
+	field.AllocGrid()
+	if err := field.FillMines(); err != nil {
+		t.Fatalf("err should be nil")
+	}
+
+	mine := 0
+	for y := 0; y < field.Height; y++ {
+		for x := 0; x < field.Width; x++ {
+			if field.Grid[y][x].HasMine() {
+				mine++
+			}
+		}
+	}
+
+	if field.Mine != mine {
+		t.Errorf("expected %d to eq %d", field.Mine, mine)
 	}
 }
