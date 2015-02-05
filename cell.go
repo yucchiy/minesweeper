@@ -1,8 +1,9 @@
 package main
 
 import (
-	"github.com/nsf/termbox-go"
 	"image"
+
+	"github.com/nsf/termbox-go"
 )
 
 type Cell struct {
@@ -10,6 +11,8 @@ type Cell struct {
 	Mine    bool
 	Opened  bool
 	Flagged bool
+
+	NumMineNeighbor int
 }
 
 func (c *Cell) HasMine() bool {
@@ -25,7 +28,6 @@ func (c *Cell) HasFlagged() bool {
 }
 
 func (c *Cell) GetTermboxCell() *termbox.Cell {
-
 	if !c.HasOpened() {
 		return &termbox.Cell{' ', termbox.ColorWhite, termbox.ColorBlue}
 	}
@@ -38,5 +40,9 @@ func (c *Cell) GetTermboxCell() *termbox.Cell {
 		return &termbox.Cell{'F', termbox.ColorRed | termbox.AttrBold, termbox.ColorBlue}
 	}
 
-	return nil
+	if c.NumMineNeighbor == 0 {
+		return &termbox.Cell{' ', termbox.ColorDefault, termbox.ColorDefault}
+	}
+
+	return &termbox.Cell{rune('0' + c.NumMineNeighbor), termbox.ColorBlue, termbox.ColorDefault}
 }

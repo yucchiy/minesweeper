@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
-	"github.com/nsf/termbox-go"
 	"image"
+
+	"github.com/nsf/termbox-go"
 )
 
 type Game struct {
@@ -12,8 +13,7 @@ type Game struct {
 	Cursor        image.Point
 	PositionMine  image.Point
 	PositionField image.Point
-
-	ChangedField bool
+	ChangedField  bool
 }
 
 func CreateGame(opts *FieldOpts) (*Game, error) {
@@ -24,9 +24,9 @@ func CreateGame(opts *FieldOpts) (*Game, error) {
 
 	return &Game{
 		Field:         field,
-		PositionField: image.Point{X: 1, Y: 2},
-		PositionMine:  image.Point{X: field.Width / 2, Y: 1},
-		Cursor:        image.Point{X: 1, Y: 2},
+		PositionField: image.Point{X: 0, Y: 1},
+		PositionMine:  image.Point{X: field.Width / 2, Y: 0},
+		Cursor:        image.Point{X: 0, Y: 0},
 		State:         StatePlay}, nil
 }
 
@@ -48,19 +48,17 @@ func (game *Game) Display(clear bool) {
 		termbox.Clear(termbox.ColorDefault, termbox.ColorDefault)
 	}
 
-	DrawColorString("Minesweeper", 0, 0, termbox.AttrBold, termbox.ColorDefault)
-	if game.State == StatePlay {
-		termbox.SetCursor(game.Cursor.X+1, game.Cursor.Y+1)
-	} else {
-		termbox.HideCursor()
-	}
-
 	if game.ChangedField || clear {
-		DrawColorString(fmt.Sprintf("%02d", game.Field.GetNumMineLeft()), game.PositionMine.X, game.PositionMine.Y, termbox.ColorRed|termbox.AttrBold, termbox.ColorWhite)
+		DrawColorString(fmt.Sprintf("%d", game.Field.GetNumMineLeft()), game.PositionMine.X, game.PositionMine.Y, termbox.ColorRed|termbox.AttrBold, termbox.ColorWhite)
 		DisplayField(game.Field, game.PositionField)
 		game.ChangedField = false
 	}
 
+	if game.State == StatePlay {
+		termbox.SetCursor(game.Cursor.X+game.PositionField.X, game.Cursor.Y+game.PositionField.Y)
+	} else {
+		termbox.HideCursor()
+	}
 	termbox.Flush()
 }
 
@@ -76,7 +74,6 @@ func DisplayField(f *Field, pos image.Point) {
 }
 
 func (game *Game) Play() error {
-
 	err := termbox.Init()
 	if err != nil {
 		return err
@@ -87,7 +84,23 @@ func (game *Game) Play() error {
 	game.ChangedField = true
 	for game.State = StatePlay; game.State != StateQuit; {
 		game.Display(clear)
+		action := GetAction(game.State, termbox.PollEvent())
+		if action != nil {
+			state := action(game)
+			clear = state != game.State
+			game.State = state
+		}
 	}
 
+	return nil
+}
+
+func (game *Game) MoveCursor(dx, dy int) error {
+	nx, ny := game.Cursor.X+dx, game.Cursor.Y+dy
+	if !game.Field.InField(nx, ny) {
+		return ErrOutOfField
+	}
+
+	game.Cursor.X, game.Cursor.Y = nx, ny
 	return nil
 }
