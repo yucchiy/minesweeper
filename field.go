@@ -91,7 +91,7 @@ func (field *Field) FillMines() error {
 			pos.X, pos.Y = rand.Intn(field.Width), rand.Intn(field.Height)
 		}
 
-		mines[pos], field.Grid[pos.Y][pos.X].Mine = true, true
+		mines[pos], field.Grid[pos.Y][pos.X].HasMine = true, true
 	}
 
 	field.Mine = len(mines)
@@ -107,7 +107,7 @@ func (field *Field) FillMines() error {
 
 			cnt := 0
 			for _, pos := range neighbors {
-				if field.Grid[pos.Y][pos.X].HasMine() {
+				if field.Grid[pos.Y][pos.X].HasMine {
 					cnt++
 				}
 			}
@@ -174,7 +174,7 @@ func (f *Field) Reveal(x, y int) (bool, error) {
 		return false, ErrOutOfField
 	}
 
-	if f.Grid[y][x].HasFlagged() {
+	if f.Grid[y][x].Flagged {
 		return false, nil
 	}
 
@@ -183,7 +183,7 @@ func (f *Field) Reveal(x, y int) (bool, error) {
 	}
 
 	f.Grid[y][x].Opened = true
-	if f.Grid[y][x].HasMine() {
+	if f.Grid[y][x].HasMine {
 		f.State = FieldStateLose
 		return true, nil
 	}

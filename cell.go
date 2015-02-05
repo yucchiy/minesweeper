@@ -8,35 +8,23 @@ import (
 
 type Cell struct {
 	Point   image.Point
-	Mine    bool
+	HasMine bool
 	Opened  bool
 	Flagged bool
 
 	NumMineNeighbor int
 }
 
-func (c *Cell) HasMine() bool {
-	return c.Mine
-}
-
-func (c *Cell) HasOpened() bool {
-	return c.Opened
-}
-
-func (c *Cell) HasFlagged() bool {
-	return c.Flagged
-}
-
 func (c *Cell) GetTermboxCell() *termbox.Cell {
-	if c.HasFlagged() {
+	if c.Flagged {
 		return &termbox.Cell{'F', termbox.ColorRed | termbox.AttrBold, termbox.ColorBlue}
 	}
 
-	if !c.HasOpened() {
+	if !c.Opened {
 		return &termbox.Cell{' ', termbox.ColorWhite, termbox.ColorBlue}
 	}
 
-	if c.HasMine() {
+	if c.HasMine {
 		return &termbox.Cell{'*', termbox.ColorWhite, termbox.ColorRed}
 	}
 
