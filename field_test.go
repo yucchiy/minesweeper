@@ -34,10 +34,10 @@ func TestCreateField_withNil(t *testing.T) {
 	}
 }
 
-func TestInit(t *testing.T) {
+func TestReset(t *testing.T) {
 	field := &Field{Width: 10, Height: 8}
 
-	field.Init()
+	field.Reset()
 
 	if len(field.Grid) != 8 {
 		t.Fatalf("length of field.Grid should be 8")

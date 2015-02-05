@@ -31,14 +31,14 @@ func CreateField(opts *FieldOpts) (*Field, error) {
 		Height: opts.Height,
 	}
 
-	if err := field.Init(); err != nil {
+	if err := field.Reset(); err != nil {
 		return nil, err
 	}
 
 	return field, nil
 }
 
-func (field *Field) Init() error {
+func (field *Field) Reset() error {
 
 	field.Grid = make([][]Cell, field.Height)
 	for y := 0; y < field.Height; y++ {
