@@ -79,7 +79,7 @@ func TestFillMines_success(t *testing.T) {
 	mine := 0
 	for y := 0; y < field.Height; y++ {
 		for x := 0; x < field.Width; x++ {
-			if field.Grid[y][x].HasMine() {
+			if field.Grid[y][x].HasMine {
 				mine++
 			}
 		}
