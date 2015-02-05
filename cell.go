@@ -28,16 +28,16 @@ func (c *Cell) HasFlagged() bool {
 }
 
 func (c *Cell) GetTermboxCell() *termbox.Cell {
+	if c.HasFlagged() {
+		return &termbox.Cell{'F', termbox.ColorRed | termbox.AttrBold, termbox.ColorBlue}
+	}
+
 	if !c.HasOpened() {
 		return &termbox.Cell{' ', termbox.ColorWhite, termbox.ColorBlue}
 	}
 
 	if c.HasMine() {
 		return &termbox.Cell{'*', termbox.ColorWhite, termbox.ColorRed}
-	}
-
-	if c.HasFlagged() {
-		return &termbox.Cell{'F', termbox.ColorRed | termbox.AttrBold, termbox.ColorBlue}
 	}
 
 	if c.NumMineNeighbor == 0 {

@@ -104,3 +104,30 @@ func (game *Game) MoveCursor(dx, dy int) error {
 	game.Cursor.X, game.Cursor.Y = nx, ny
 	return nil
 }
+
+func (game *Game) ToggleFlag() (GameState, error) {
+	changed, err := game.Field.ToggleFlag(game.Cursor.X, game.Cursor.Y)
+	if err != nil {
+		return StateQuit, err
+	}
+
+	game.ChangedField = changed
+	return StatePlay, nil
+}
+
+func (game *Game) Reveal() (GameState, error) {
+	changed, err := game.Field.Reveal(game.Cursor.X, game.Cursor.Y)
+	if err != nil {
+		return StateQuit, err
+	}
+
+	switch game.Field.GetState() {
+	case FieldStateWon:
+		return StateWin, nil
+	case FieldStateLose:
+		return StateLose, nil
+	}
+
+	game.ChangedField = changed
+	return StatePlay, nil
+}

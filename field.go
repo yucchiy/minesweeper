@@ -13,13 +13,23 @@ type FieldOpts struct {
 	Height int
 }
 
+type FieldState int
+
 type Field struct {
 	Mine           int
 	NumMineFlagged int
+	NumSpaceLeft   int
 	Width          int
 	Height         int
 	Grid           [][]Cell
+	State          FieldState
 }
+
+const (
+	FieldStateWon FieldState = iota
+	FieldStateLose
+	FieldStateContinue
+)
 
 var ErrInvalidFieldOpts = fmt.Errorf("invalid FieldOpts")
 var ErrNoAllocGrid = fmt.Errorf("should alloc grid")
@@ -52,6 +62,7 @@ func (field *Field) Reset() error {
 		return err
 	}
 
+	field.State = FieldStateContinue
 	return nil
 }
 
@@ -84,6 +95,7 @@ func (field *Field) FillMines() error {
 	}
 
 	field.Mine = len(mines)
+	field.NumSpaceLeft = field.Width*field.Height - field.Mine
 	field.NumMineFlagged = 0
 
 	for y := 0; y < field.Height; y++ {
@@ -135,4 +147,56 @@ func (field *Field) GetNeighbors(x, y int) ([]image.Point, error) {
 	}
 
 	return neighbors, nil
+}
+
+func (f *Field) ToggleFlag(x, y int) (bool, error) {
+	if !f.InField(x, y) {
+		return false, ErrOutOfField
+	}
+
+	if f.Grid[y][x].Opened {
+		return false, nil
+	}
+
+	if f.Grid[y][x].Flagged {
+		f.NumMineFlagged -= 1
+		f.Grid[y][x].Flagged = false
+	} else {
+		f.NumMineFlagged += 1
+		f.Grid[y][x].Flagged = true
+	}
+
+	return true, nil
+}
+
+func (f *Field) Reveal(x, y int) (bool, error) {
+	if !f.InField(x, y) {
+		return false, ErrOutOfField
+	}
+
+	if f.Grid[y][x].HasFlagged() {
+		return false, nil
+	}
+
+	if f.Grid[y][x].Opened {
+		return false, nil
+	}
+
+	f.Grid[y][x].Opened = true
+	if f.Grid[y][x].HasMine() {
+		f.State = FieldStateLose
+		return true, nil
+	}
+
+	f.NumSpaceLeft -= 1
+	if f.NumSpaceLeft == 0 {
+		f.State = FieldStateWon
+		return true, nil
+	}
+
+	return true, nil
+}
+
+func (field *Field) GetState() FieldState {
+	return field.State
 }
