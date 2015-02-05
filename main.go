@@ -1,16 +1,13 @@
 package main
 
 import (
-	"fmt"
-	//"github.com/nsf/termbox-go"
+	"os"
 )
 
-func main() {
-	// 	err := termbox.Init()
-	// 	if err != nil {
-	// 		panic(err)
-	// 	}
-	// 	defer termbox.Close()
+const Name string = "minesweeper"
+const Version string = "0.0.1"
 
-	fmt.Println("Hello Minesweeper")
+func main() {
+	cli := &CLI{outStream: os.Stdout, errStream: os.Stderr}
+	os.Exit(cli.Run(os.Args))
 }
