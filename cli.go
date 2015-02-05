@@ -12,6 +12,7 @@ const (
 	ExitCodeError     = 10 + iota
 	ExitCodeParseFlagsError
 	ExitCodeBadArgsError
+	ExitCodeRuntimeError
 )
 
 type CLI struct {
@@ -57,6 +58,17 @@ func (cli *CLI) Run(args []string) int {
 	if version {
 		fmt.Fprintf(cli.errStream, "%s v%s\n", Name, Version)
 		return ExitCodeOK
+	}
+
+	game, err := CreateGame(&fieldOpts)
+	if err != nil {
+		fmt.Fprintf(cli.errStream, "runtime error")
+		return ExitCodeRuntimeError
+	}
+
+	if err := game.Play(); err != nil {
+		fmt.Fprintf(cli.errStream, "runtime error")
+		return ExitCodeRuntimeError
 	}
 
 	return ExitCodeOK
