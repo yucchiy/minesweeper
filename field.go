@@ -14,10 +14,11 @@ type FieldOpts struct {
 }
 
 type Field struct {
-	Mine   int
-	Width  int
-	Height int
-	Grid   [][]Cell
+	Mine           int
+	NumMineFlagged int
+	Width          int
+	Height         int
+	Grid           [][]Cell
 }
 
 var ErrInvalidFieldOpts = fmt.Errorf("invalid FieldOpts")
@@ -81,5 +82,12 @@ func (field *Field) FillMines() error {
 		mines[pos], field.Grid[pos.Y][pos.X].Mine = true, true
 	}
 
+	field.Mine = len(mines)
+	field.NumMineFlagged = 0
+
 	return nil
+}
+
+func (field *Field) GetNumMineLeft() int {
+	return field.Mine - field.NumMineFlagged
 }

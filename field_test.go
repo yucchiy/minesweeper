@@ -89,3 +89,12 @@ func TestFillMines_success(t *testing.T) {
 		t.Errorf("expected %d to eq %d", field.Mine, mine)
 	}
 }
+
+func TestGetNumMineLeft(t *testing.T) {
+	field := &Field{Mine: 10, NumMineFlagged: 4}
+
+	expected := 6
+	if ret := field.GetNumMineLeft(); ret != expected {
+		t.Fatalf("expected %d to eq %d", ret, expected)
+	}
+}
