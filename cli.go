@@ -11,6 +11,7 @@ const (
 	ExitCodeOK    int = 0
 	ExitCodeError     = 10 + iota
 	ExitCodeParseFlagsError
+	ExitCodeBadArgsError
 )
 
 type CLI struct {
@@ -35,6 +36,21 @@ func (cli *CLI) Run(args []string) int {
 
 	if err := flags.Parse(args[1:]); err != nil {
 		return ExitCodeParseFlagsError
+	}
+
+	if fieldOpts.Width <= 0 {
+		fmt.Fprintf(cli.errStream, "option -width should be a positive number")
+		return ExitCodeBadArgsError
+	}
+
+	if fieldOpts.Height <= 0 {
+		fmt.Fprintf(cli.errStream, "option -height should be a positive number")
+		return ExitCodeBadArgsError
+	}
+
+	if fieldOpts.Width*fieldOpts.Height < fieldOpts.Bomb {
+		fmt.Fprintf(cli.errStream, "option -bomb should be smaller than field size")
+		return ExitCodeBadArgsError
 	}
 
 	// Version
