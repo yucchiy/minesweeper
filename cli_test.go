@@ -71,17 +71,17 @@ func TestRun_BadArgsErrorHeight(t *testing.T) {
 	}
 }
 
-func TestRun_BadArgsErrorBomb(t *testing.T) {
+func TestRun_BadArgsErrorMine(t *testing.T) {
 	outStream, errStream := new(bytes.Buffer), new(bytes.Buffer)
 	cli := &CLI{outStream: outStream, errStream: errStream}
-	args := strings.Split("minesweeper -width=10 -height=10 -bomb=101", " ")
+	args := strings.Split("minesweeper -width=10 -height=10 -mine=101", " ")
 
 	status := cli.Run(args)
 	if status != ExitCodeBadArgsError {
 		t.Errorf("expected %d to eq %d", status, ExitCodeBadArgsError)
 	}
 
-	expected := "option -bomb should be smaller than field size"
+	expected := "option -mine should be smaller than field size"
 	if !strings.Contains(errStream.String(), expected) {
 		t.Fatalf("expected %q to contain %q", errStream.String(), expected)
 	}

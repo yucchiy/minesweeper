@@ -8,7 +8,7 @@ func TestCreateField_withValidOpts(t *testing.T) {
 	opts := &FieldOpts{
 		Width:  10,
 		Height: 10,
-		Bomb:   10,
+		Mine:   10,
 	}
 
 	field, err := CreateField(opts)

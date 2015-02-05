@@ -6,13 +6,13 @@ import (
 )
 
 type FieldOpts struct {
-	Bomb   int
+	Mine   int
 	Width  int
 	Height int
 }
 
 type Field struct {
-	Bomb   int
+	Mine   int
 	Width  int
 	Height int
 	Grid   [][]Cell
@@ -26,7 +26,7 @@ func CreateField(opts *FieldOpts) (*Field, error) {
 	}
 
 	field := &Field{
-		Bomb:   opts.Bomb,
+		Mine:   opts.Mine,
 		Width:  opts.Width,
 		Height: opts.Height,
 	}

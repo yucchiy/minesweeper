@@ -29,7 +29,7 @@ func (cli *CLI) Run(args []string) int {
 		fmt.Fprintf(cli.errStream, usage, Name)
 	}
 
-	flags.IntVar(&fieldOpts.Bomb, "bomb", 5, "Number of Bomb")
+	flags.IntVar(&fieldOpts.Mine, "mine", 5, "Number of Mine")
 	flags.IntVar(&fieldOpts.Width, "width", 5, "Field width")
 	flags.IntVar(&fieldOpts.Height, "height", 5, "Field height")
 
@@ -49,8 +49,8 @@ func (cli *CLI) Run(args []string) int {
 		return ExitCodeBadArgsError
 	}
 
-	if fieldOpts.Width*fieldOpts.Height < fieldOpts.Bomb {
-		fmt.Fprintf(cli.errStream, "option -bomb should be smaller than field size")
+	if fieldOpts.Width*fieldOpts.Height < fieldOpts.Mine {
+		fmt.Fprintf(cli.errStream, "option -mine should be smaller than field size")
 		return ExitCodeBadArgsError
 	}
 
@@ -81,7 +81,7 @@ Usage: %s [options]
 
 Options:
 
-  -bomb=<num>         Number of bomb
+  -mine=<num>         Number of mine
   -width=<width>      Width of a Field
   -height=<height>    Height of a Field
 
