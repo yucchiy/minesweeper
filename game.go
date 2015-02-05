@@ -7,6 +7,15 @@ import (
 	"github.com/nsf/termbox-go"
 )
 
+type GameState int
+
+const (
+	StatePlay GameState = iota
+	StateLose
+	StateWin
+	StateQuit
+)
+
 type Game struct {
 	Field         *Field
 	State         GameState
