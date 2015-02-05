@@ -54,6 +54,8 @@ func (game *Game) Display(clear bool) {
 		game.ChangedField = false
 	}
 
+	DisplayState(game.State, 0, game.PositionField.Y+game.Field.Height+1)
+
 	if game.State == StatePlay {
 		termbox.SetCursor(game.Cursor.X+game.PositionField.X, game.Cursor.Y+game.PositionField.Y)
 	} else {
@@ -70,6 +72,15 @@ func DisplayField(f *Field, pos image.Point) {
 				termbox.SetCell(x+pos.X, y+pos.Y, c.Ch, c.Fg, c.Bg)
 			}
 		}
+	}
+}
+
+func DisplayState(state GameState, x, y int) {
+	switch state {
+	case StateWin:
+		DrawColorString("You win!!", x, y, termbox.ColorWhite, termbox.ColorDefault)
+	case StateLose:
+		DrawColorString("You lose...", x, y, termbox.ColorWhite, termbox.ColorDefault)
 	}
 }
 

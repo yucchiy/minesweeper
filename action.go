@@ -11,6 +11,8 @@ func GetAction(state GameState, event termbox.Event) Action {
 	switch state {
 	case StatePlay:
 		return GetPlayAction(event)
+	case StateWin:
+		return GetWinAction(event)
 	case StateLose:
 		return GetLoseAction(event)
 	default:
@@ -40,6 +42,15 @@ func GetPlayAction(event termbox.Event) Action {
 }
 
 func GetLoseAction(event termbox.Event) Action {
+	switch event {
+	case termbox.Event{Type: termbox.EventKey, Ch: 'q'}:
+		return ActionQuit
+	}
+
+	return nil
+}
+
+func GetWinAction(event termbox.Event) Action {
 	switch event {
 	case termbox.Event{Type: termbox.EventKey, Ch: 'q'}:
 		return ActionQuit

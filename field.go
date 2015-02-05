@@ -194,6 +194,18 @@ func (f *Field) Reveal(x, y int) (bool, error) {
 		return true, nil
 	}
 
+	if f.Grid[y][x].NumMineNeighbor == 0 {
+		neighbors, err := f.GetNeighbors(x, y)
+		if err == nil {
+			// dfs
+			for _, p := range neighbors {
+				if !f.Grid[p.Y][p.X].Opened {
+					f.Reveal(p.X, p.Y)
+				}
+			}
+		}
+	}
+
 	return true, nil
 }
 
