@@ -30,6 +30,14 @@ func GetPlayAction(event termbox.Event) Action {
 		return ActionMoveLeft
 	case termbox.Event{Type: termbox.EventKey, Key: termbox.KeyArrowRight}:
 		return ActionMoveRight
+	case termbox.Event{Type: termbox.EventKey, Ch: 'h'}:
+		return ActionMoveLeft
+	case termbox.Event{Type: termbox.EventKey, Ch: 'j'}:
+		return ActionMoveDown
+	case termbox.Event{Type: termbox.EventKey, Ch: 'k'}:
+		return ActionMoveUp
+	case termbox.Event{Type: termbox.EventKey, Ch: 'l'}:
+		return ActionMoveRight
 	case termbox.Event{Type: termbox.EventKey, Ch: 'f'}:
 		return ActionToggleFlag
 	case termbox.Event{Type: termbox.EventKey, Ch: 'q'}:
