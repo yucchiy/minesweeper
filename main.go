@@ -5,7 +5,7 @@ import (
 )
 
 const Name string = "minesweeper"
-const Version string = "0.0.1"
+const Version string = "0.1.0"
 
 func main() {
 	cli := &CLI{outStream: os.Stdout, errStream: os.Stderr}
