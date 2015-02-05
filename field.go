@@ -208,7 +208,3 @@ func (f *Field) Reveal(x, y int) (bool, error) {
 
 	return true, nil
 }
-
-func (field *Field) GetState() FieldState {
-	return field.State
-}

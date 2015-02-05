@@ -231,3 +231,5 @@ func TestGetNeighbors_Center(t *testing.T) {
 		t.Fatalf("expected %d to eq %d", ret, expected)
 	}
 }
+
+// Todo: adding tests for ToggleFlag & Reveal

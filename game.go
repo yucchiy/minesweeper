@@ -141,7 +141,7 @@ func (game *Game) Reveal() (GameState, error) {
 		return StateQuit, err
 	}
 
-	switch game.Field.GetState() {
+	switch game.Field.State {
 	case FieldStateWon:
 		return StateWin, nil
 	case FieldStateLose:
