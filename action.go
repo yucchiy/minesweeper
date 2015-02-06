@@ -53,6 +53,8 @@ func GetLoseAction(event termbox.Event) Action {
 	switch event {
 	case termbox.Event{Type: termbox.EventKey, Ch: 'q'}:
 		return ActionQuit
+	case termbox.Event{Type: termbox.EventKey, Ch: 'n'}:
+		return ActionNewGame
 	}
 
 	return nil
@@ -62,6 +64,8 @@ func GetWinAction(event termbox.Event) Action {
 	switch event {
 	case termbox.Event{Type: termbox.EventKey, Ch: 'q'}:
 		return ActionQuit
+	case termbox.Event{Type: termbox.EventKey, Ch: 'n'}:
+		return ActionNewGame
 	}
 
 	return nil
@@ -105,4 +109,13 @@ func ActionReveal(g *Game) GameState {
 	}
 
 	return state
+}
+
+func ActionNewGame(g *Game) GameState {
+	err := g.Field.Reset()
+	if err != nil {
+		return StateQuit
+	}
+
+	return StatePlay
 }
